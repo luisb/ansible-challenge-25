@@ -1,2 +1,38 @@
 ---
 # tasks file for haproxy
+- name: Ensure haproxy is installed
+  ansible.builtin.dnf:
+    name: haproxy
+    state: present
+
+- name: Deploy haproxy config
+  ansible.builtin.template:
+    src: haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    mode: '0600'
+    owner: root
+    group: root
+  notify: restart haproxy
+
+- name: Ensure haproxy is started and enabled
+  ansible.builtin.service:
+    name: haproxy
+    state: started
+    enabled: true
+
+- name: Ensure http traffic goes through the firewall
+  ansible.posix.firewalld:
+    service: http
+    state: present
+    permanent: true
+    immediate: true
+
+- name: Allow haproxy stats port traffic through the firewall
+  ansible.posix.firewalld:
+    port: 8404/tcp
+    state: enabled
+    permanent: true
+    immediate: true
+
+- debug:
+    var: hostvars
