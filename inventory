@@ -4,3 +4,6 @@ pnode1
 [webservers]
 pnode2
 pnode3
+
+[proxy]
+ansible2
