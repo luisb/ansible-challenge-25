@@ -33,10 +33,3 @@
     state: enabled
     permanent: true
     immediate: true
-
-- name: Allow haproxy stats port traffic through the firewall
-  ansible.posix.firewalld:
-    port: 8404/tcp
-    state: enabled
-    permanent: true
-    immediate: true
