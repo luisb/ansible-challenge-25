@@ -7,7 +7,5 @@ backend web_servers
     balance roundrobin
     option httpchk GET /health
     {% for host in groups['webservers'] %}
-      {% for ip in hostvars[host]['ansible_host'] }}
-        server {{ host ]} {{ ip }}:80 check
-      {% endfor %}
+      server {{ host }} {{ hostvars[host]['ansible_facts']['default_ipv4']['address'] }}:80 check
     {% endfor %}
