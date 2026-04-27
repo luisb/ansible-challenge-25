@@ -1,5 +1,11 @@
 ---
 # tasks file for haproxy
+- name: Gather facts from webservers group
+  ansible.builtin.setup:
+  delegate_to: "{{item}}"
+  delegate_facts: true
+  loop: "{{groups['webservers']}}"
+
 - name: Ensure haproxy is installed
   ansible.builtin.dnf:
     name: haproxy
@@ -20,10 +26,10 @@
     state: started
     enabled: true
 
-- name: Ensure http traffic goes through the firewall
+- name: Ensure traffic on port 80 goes through the firewall
   ansible.posix.firewalld:
-    service: http
-    state: present
+    port: 80/tcp
+    state: enabled
     permanent: true
     immediate: true
 
@@ -33,6 +39,3 @@
     state: enabled
     permanent: true
     immediate: true
-
-- debug:
-    var: hostvars
