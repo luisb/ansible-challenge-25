@@ -18,6 +18,7 @@
     mode: '0600'
     owner: root
     group: root
+    validate: "haproxy -c -f %s"
   notify: restart haproxy
 
 - name: Ensure haproxy is started and enabled
